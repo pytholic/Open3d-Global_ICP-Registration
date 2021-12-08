@@ -3,7 +3,14 @@ import numpy as np
 import copy
 import time
 
+# Helper visualization function
 def draw_registration_result(source, target, transformation):
+    """
+    This helper function `visualizes` the transformed 
+    source point cloud together with the target 
+    point cloud.
+    """
+
     source_temp = copy.deepcopy(source)
     target_temp = copy.deepcopy(target)
     source_temp.paint_uniform_color([1, 0.706, 0])
@@ -11,7 +18,7 @@ def draw_registration_result(source, target, transformation):
     source_temp.transform(transformation)
     o3d.visualization.draw_geometries([source_temp, target_temp])
 
-
+# Extract geometric features
 def preprocess_point_cloud(pcd, voxel_size):
     print(":: Downsample with a voxel size %.3f." % voxel_size)
     pcd_down = pcd.voxel_down_sample(voxel_size)
@@ -28,7 +35,7 @@ def preprocess_point_cloud(pcd, voxel_size):
         o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=100))
     return pcd_down, pcd_fpfh
 
-
+# Read point clouds and misalign them
 def prepare_dataset(voxel_size):
     print(":: Load two point clouds and disturb initial pose.")
     source = o3d.io.read_point_cloud("./test_data/3/model.ply") # source
@@ -49,7 +56,7 @@ voxel_size = 0.005  # means 0.5cm for this dataset => 0.5 cm = 1 voxel
 source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(
     voxel_size)
 
-
+# Run global registration
 def execute_global_registration(source_down, target_down, source_fpfh,
                                 target_fpfh, voxel_size):
     distance_threshold = voxel_size * 1.5
@@ -83,7 +90,7 @@ print(result_ransac)
 
 draw_registration_result(source_down, target_down, result_ransac.transformation)
 
-
+# Run ICP registration
 def refine_registration(source, target, source_fpfh, target_fpfh, voxel_size):
     distance_threshold = voxel_size * 0.4
     print(":: Point-to-plane ICP registration is applied on original point")
