@@ -45,7 +45,7 @@ def prepare_dataset(voxel_size):
     return source, target, source_down, target_down, source_fpfh, target_fpfh
 
 
-voxel_size = 0.005  # means 5cm for this dataset
+voxel_size = 0.005  # means 0.5cm for this dataset => 0.5 cm = 1 voxel
 source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(
     voxel_size)
 
