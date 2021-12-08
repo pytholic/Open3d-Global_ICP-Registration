@@ -62,7 +62,10 @@ To find the right result mean sampling with **s** containing only the `inlier` p
 
 **What is the probability of only drawing inliers?**
 
-The probability of drawing a single inlier is $1-e$. Therefore the probability for drawing all the inliers is $(1-e)(1-e)(1-e)...$, i.e. $p = (1-e)^s$. 
+The probability of drawing a single inlier is `1-e`. Therefore the probability for drawing all the inliers is `(1-e)(1-e)(1-e)...`, i.e. 
+```math
+p = (1-e)^s 
+```
 
 <br />
 
