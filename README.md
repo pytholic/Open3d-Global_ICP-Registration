@@ -11,7 +11,7 @@ This helper function `visualizes` the transformed source point cloud together wi
 We downsample the point cloud, estimate normals, then compute a **FPFH** feature for each point. The FPFH feature is a 33-dimensional vector that describes the local geometric property of a point. A nearest neighbor query in the 33-dimensional space can return points with similar local geometric structures.
 
 ### Input
-We read a source point cloud and a target point cloud from two files. They are misaligned with an `identity matrix` as transformation.
+We read a source point cloud and a target point cloud from two files. They are misaligned with a `rotation matrix` as transformation.
 
 ### RANSAC
 RANSAC (Random Sample Consensus) is used to deal with the `outliers` in the data associations or identifying which points are `inliers` and `outliers` for our model estimation technique.
