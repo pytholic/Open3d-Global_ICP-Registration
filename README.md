@@ -29,37 +29,56 @@ We set the RANSAC parameters based on the empirical value provided by **Choi2015
 ### RANSAC Algorithm
 Explanation by [Cyrill Stachniss](https://www.youtube.com/watch?v=Cu1f6vpEilg&t=251s).
 
+<br />
+
 **Steps**
 1. **Sample** the number of data points required to fit the model
 2. **Compute** the model parameters using the sampled data points
 3. **Score** by the fraction of `inliers` within a preset `threshold` of the model
 
 Repeat steps 1-3 until the best model is found with high confidence.
+
 <br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-**How often do we need to try?**\
+
+**How often do we need to try?**
+
 Not easy to answer. Let's see which `parameters` are involved in our RANSAC estimation and how the affect the **number of trials** that we need to do.
 
 * Number of sampled points **s** (minimum number needed to fit the model). Only inlier points are included.
 * Outlier ratio **e** (e = #outliers / #datapoints)
 
-**What is requried Number of trials T?**\
+<br />
+
+**What is requried Number of trials T?**
+
 Choose **T** so that, with probability **p**, at least one random sample set is free 
 from outliers.
 
 For one `iteration`, how likely is it to to succeed and find the right result? What does it mean to find the right result?
 
 To find the right result mean sampling with **s** containing only the `inlier` points and there is not a single `outlier` in this set. The nwe can comput the `model` only using the inliers, and then have correct results.
- 
+
+<br />
+
 **What is the probability of only drawing inliers?**\
+The probability of drawing a single inlier is $1-e$. Therefore the probability for drawing all the inliers is $(1-e)(1-e)(1-e)...$, i.e. $p = (1-e)^s$. 
 
+<br />
 
+**What is the probability of failing?**
+
+Failing means that one of those points is an oulier. So it will be $1 - p = 1 - (1-e)^s$. This is the probability of failing **once** in one iteration.
+
+Then what is the probability of failing **T** times? i.e. What is the probability of failing always?\
+It will be $1 - p = 1-((1-e)^s)^T$.
+
+**T** is the only unknown here. We can rearrange the equation and compute **T** based on **p**, **e** and **s**. We can take `log` on both sides and get the following equation.
+
+$log(1-p) = Tlog(1 - (1-e)^s)$ 
+
+$T = \frac{log(1-p)}{log(1 - (1-e)^s)}$
+
+This gives us the numeber of trials that we need.
 
 ## Local Refinement
 For performance reason, the global registration is only performed on a heavily `down-sampled` point cloud. The result is also not tight. We use **Point-to-plane ICP** to further refine the alignment.
