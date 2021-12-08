@@ -62,25 +62,22 @@ To find the right result mean sampling with **s** containing only the `inlier` p
 
 **What is the probability of only drawing inliers?**
 
-The probability of drawing a single inlier is `1-e`. Therefore the probability for drawing all the inliers is `(1-e)(1-e)(1-e)...`, i.e. 
-```math
-p = (1-e)^s 
-```
+The probability of drawing a single inlier is `1-e`. Therefore the probability for drawing all the inliers is `(1-e)(1-e)(1-e)...`, i.e. `p = (1-e)^s`. 
 
 <br />
 
 **What is the probability of failing?**
 
-Failing means that one of those points is an oulier. So it will be $1 - p = 1 - (1-e)^s$. This is the probability of failing **once** in one iteration.
+Failing means that one of those points is an oulier. So it will be `1 - p = 1 - (1-e)^s`. This is the probability of failing **once** in one iteration.
 
 Then what is the probability of failing **T** times? i.e. What is the probability of failing always?\
-It will be $1 - p = 1-((1-e)^s)^T$.
+It will be `1 - p = 1-((1-e)^s)^T`.
 
 **T** is the only unknown here. We can rearrange the equation and compute **T** based on **p**, **e** and **s**. We can take `log` on both sides and get the following equation.
 
-$log(1-p) = Tlog(1 - (1-e)^s)$ 
+`log(1-p) = Tlog(1 - (1-e)^s)`
 
-$T = \frac{log(1-p)}{log(1 - (1-e)^s)}$
+`T = \frac{log(1-p)}{log(1 - (1-e)^s)}`
 
 This gives us the numeber of trials that we need.
 
