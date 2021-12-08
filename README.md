@@ -29,12 +29,18 @@ We set the RANSAC parameters based on the empirical value provided by **Choi2015
 ### RANSAC Algorithm
 Explanation by [Cyrill Stachniss](https://www.youtube.com/watch?v=Cu1f6vpEilg&t=251s).
 
-**Steps**\
+**Steps**
 1. **Sample** the number of data points required to fit the model
 2. **Compute** the model parameters using the sampled data points
 3. **Score** by the fraction of `inliers` within a preset `threshold` of the model
 
 Repeat steps 1-3 until the best model is found with high confidence.
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 <br />
 <br />
 **How often do we need to try?**\
