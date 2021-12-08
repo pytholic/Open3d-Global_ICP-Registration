@@ -77,7 +77,7 @@ It will be `1 - p = 1-((1-e)^s)^T`.
 
 `log(1-p) = Tlog(1 - (1-e)^s)`
 
-`T = \frac{log(1-p)}{log(1 - (1-e)^s)}`
+`T = log(1-p) / log(1 - (1-e)^s)`
 
 This gives us the numeber of trials that we need.
 
