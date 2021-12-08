@@ -27,24 +27,32 @@ Only matches that pass the **pruning step** are used to compute a `transformatio
 We set the RANSAC parameters based on the empirical value provided by **Choi2015**.
 
 ### RANSAC Algorithm
-Explanation by [Cyrill Stachniss](https://www.youtube.com/watch?v=Cu1f6vpEilg&t=251s)
+Explanation by [Cyrill Stachniss](https://www.youtube.com/watch?v=Cu1f6vpEilg&t=251s).
 
-**Steps**
+<mark style="background-color: DimGray">**Steps**</mark>
 1. **Sample** the number of data points required to fit the model
 2. **Compute** the model parameters using the sampled data points
 3. **Score** by the fraction of `inliers` within a preset `threshold` of the model
 
 Repeat steps 1-3 until the best model is found with high confidence.
 
-**How often do we need to try?**
+<mark style="background-color: DimGray">**How often do we need to try?**</mark>\
 Not easy to answer. Let's see which `parameters` are involved in our RANSAC estimation and how the affect the **number of trials** that we need to do.
 
-* Number of sampeld points **s** (minimum number needed to fit the model)
+* Number of sampled points **s** (minimum number needed to fit the model). Only inlier points are included.
 * Outlier ratio **e** (e = #outliers / #datapoints)
 
-What is requried Number of trials **T**?
+<mark style="background-color: DimGray">**What is requried Number of trials T?**</mark>\
 Choose **T** so that, with probability **p**, at least one random sample set is free 
-from outliers. 
+from outliers.
+
+For one `iteration`, how likely is it to to succeed and find the right result? What does it mean to find the right result?
+
+To find the right result mean sampling with **s** containing only the `inlier` points and there is not a single `outlier` in this set. The nwe can comput the `model` only using the inliers, and then have correct results.
+ 
+<mark style="background-color: DimGray">**What is the probability of only drawing inliers?**</mark>\
+
+
 
 ## Local Refinement
 For performance reason, the global registration is only performed on a heavily `down-sampled` point cloud. The result is also not tight. We use **Point-to-plane ICP** to further refine the alignment.
