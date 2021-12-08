@@ -31,9 +31,11 @@ def preprocess_point_cloud(pcd, voxel_size):
 
 def prepare_dataset(voxel_size):
     print(":: Load two point clouds and disturb initial pose.")
-    source = o3d.io.read_point_cloud("./test_data/2/source.pcd")
-    target = o3d.io.read_point_cloud("./test_data/2/target.pcd")
-    trans_init = np.asarray([[0.0, 0.0, 1.0, 0.0], [1.0, 0.0, 0.0, 0.0],
+    source = o3d.io.read_point_cloud("./test_data/3/model.ply") # source
+    target = o3d.io.read_point_cloud("./test_data/3/scene.ply") # target
+    
+    # Misalign with an identity matrix as transformation
+    trans_init = np.asarray([[0.0, 0.0, 1.0, 0.0], [1.0, 0.0, 0.0, 0.0], # This part is the issue in iOS code
                              [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 0.0, 1.0]])
     source.transform(trans_init)
     draw_registration_result(source, target, np.identity(4))
@@ -73,6 +75,12 @@ result_ransac = execute_global_registration(source_down, target_down,
                                             voxel_size)
 print("Global registration took %.3f sec.\n" % (time.time() - start))
 print(result_ransac)
+
+# tmp = []
+# for ele in result_ransac.correspondence_set:
+#     tmp.append(ele)
+# print(tmp)
+
 draw_registration_result(source_down, target_down, result_ransac.transformation)
 
 
@@ -95,9 +103,9 @@ draw_registration_result(source, target, result_icp.transformation)
 
 
 
-### Time Comparison ###
+# ### Time Comparison ###
 
-# Baseline implementation
+# # Baseline implementation
 # start = time.time()
 # result_ransac = execute_global_registration(source_down, target_down,
 #                                             source_fpfh, target_fpfh,
@@ -110,7 +118,7 @@ draw_registration_result(source, target, result_icp.transformation)
 # # Fast Global Registration
 # def execute_fast_global_registration(source_down, target_down, source_fpfh,
 #                                      target_fpfh, voxel_size):
-#     distance_threshold = voxel_size * 0.5
+#     distance_threshold = voxel_size * 1.5 #0.5
 #     print(":: Apply fast global registration with distance threshold %.3f" \
 #             % distance_threshold)
 #     result = o3d.pipelines.registration.registration_fast_based_on_feature_matching(
