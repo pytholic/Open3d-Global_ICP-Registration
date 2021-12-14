@@ -1,3 +1,5 @@
+import os
+import glob
 import open3d as o3d
 import numpy as np
 import copy
@@ -55,7 +57,7 @@ def prepare_dataset(voxel_size, source, target):
 # Run global registration
 def execute_global_registration(source_down, target_down, source_fpfh,
                                 target_fpfh, voxel_size):
-    distance_threshold = voxel_size * 1  # 1.5
+    distance_threshold = voxel_size * 2  # 1.5
     print(":: RANSAC registration on downsampled point clouds.")
     print("   Since the downsampling voxel size is %.3f," % voxel_size)
     print("   we use a liberal distance threshold %.3f." % distance_threshold)
@@ -142,11 +144,16 @@ def registration(source, target, is_filter=True):
 
 if __name__=="__main__":
 
-    source_obj = load_mesh("./data_aumc/1/model.obj")
+    #PATH = "./data_aumc/1"
+    input_ = input("Enter file number: ")
+    file_num = str(input_)
+    PATH = f"./data_aumc/{file_num}"
+    
+    source_obj = load_mesh(os.path.join(PATH, "model.obj"))
     source_xyz = mesh_to_array(source_obj)
     source = array_to_pcd(source_xyz) # source
 
-    target_obj = load_mesh("./data_aumc/1/scene.obj") # 30, 1, 3
+    target_obj = load_mesh(os.path.join(PATH, "scene.obj"))
     target_xyz = mesh_to_array(target_obj)
     target = array_to_pcd(target_xyz) # target
 
