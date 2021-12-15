@@ -45,9 +45,9 @@ def prepare_dataset(voxel_size, source, target):
     print(":: Load two point clouds and disturb initial pose.")
     
     # Misalign with a rotation matrix as transformation
-    trans_init = np.asarray([[0.0, 0.0, 1.0, 0.0], [1.0, 0.0, 0.0, 0.0], # rotate around y-axis by 90 degrees
-                             [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 0.0, 1.0]])
-    source.transform(trans_init)
+    # trans_init = np.asarray([[0.0, 0.0, 1.0, 0.0], [1.0, 0.0, 0.0, 0.0], # rotate around y-axis by 90 degrees
+    #                          [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 0.0, 1.0]])
+    # source.transform(trans_init)
     draw_registration_result(source, target, np.identity(4))
 
     source_down, source_fpfh = preprocess_point_cloud(source, voxel_size)
@@ -57,7 +57,7 @@ def prepare_dataset(voxel_size, source, target):
 # Run global registration
 def execute_global_registration(source_down, target_down, source_fpfh,
                                 target_fpfh, voxel_size):
-    distance_threshold = voxel_size * 3  # 1.5
+    distance_threshold = voxel_size * 1.5  # 1.5
     print(":: RANSAC registration on downsampled point clouds.")
     print("   Since the downsampling voxel size is %.3f," % voxel_size)
     print("   we use a liberal distance threshold %.3f." % distance_threshold)

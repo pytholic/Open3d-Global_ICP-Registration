@@ -1,6 +1,44 @@
 # Open3d-Global_ICP-Registration
 Global registration plus ICP refinement in open3d
 
+## Data
+My data consists of patient head scans (wavefront .obj format). Each patient has two mesh models i.e one is `scene` mesh which is obtained from a 3D structure sensor, and the other one is `model` mesh which is obtained from CT data.
+
+## Filtering
+Before we proceed to the **Global Registration** part, we might need to look at the filtering part. The reason for that is that sometimes the point cloud data can have a lot of outlier points i.e background parts which can also be termed as the `noise` points. 
+
+The presence of such outliers can result in the bad performance of the global registration algorithm. Therefore it is important to remove those unwanted points from our data so that we can get better and more robust registration results.
+
+In my approach, I used two methods from [**Open3D**](http://www.open3d.org/) library to filter my data. Those methods are `Plane Segmentation` and `Clustering`. Some documentation on these methods can be found at this [link](http://www.open3d.org/docs/latest/tutorial/Basic/pointcloud.html).
+
+In my case, `model` object did not have much noise so it can be used as it is. However, the `scene` objects have a lot of background noise.
+
+<!---![Scene Noise](./images/scene_noise.png)--->
+
+<p align="center">
+  <img width="400" height="380" src="./images/scene_noise.png">
+</p>
+
+In first step, I perform **plane segmentation** in Open3D and obtain the following separation between inlier and outlier points.
+
+<p align="center">
+  <img width="400" height="380" src="./images/plane_segmentation.png">
+</p>
+
+After plane segmentation, we still have some outlier parts in the point cloud. To remove those outliers, we can leverage **clustering** method provided in Open3D.
+
+<p align="center">
+  <img width="400" height="380" src="./images/clustering.png">
+</p>
+
+After **filtering**, the final point cloud looks like this.
+
+<p align="center">
+  <img width="400" height="380" src="./images/final.png">
+</p>
+
+**Note:** One thing to mention is that this filtering technique is applicable if the point cloud has **a lot of background points**. If your data has less or no noise and you apply these techniques, it can remove important parts from your data and hence can result in wrong registration. So we need to be careful and selective as to when we should apply filtering methods. 
+
 ## Global Registration
 Both **ICP registration** and **Colored point cloud registration** are known as local registration methods because they rely on a rough alignment as initialization. This tutorial shows another class of registration methods, known as **global registration**. This family of algorithms do not require an alignment for initialization. They usually produce less tight alignment results and are used as initialization of the local methods.
 
