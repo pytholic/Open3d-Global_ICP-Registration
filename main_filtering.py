@@ -57,7 +57,7 @@ def prepare_dataset(voxel_size, source, target):
 # Run global registration
 def execute_global_registration(source_down, target_down, source_fpfh,
                                 target_fpfh, voxel_size):
-    distance_threshold = voxel_size * 2  # 1.5
+    distance_threshold = voxel_size * 3  # 1.5
     print(":: RANSAC registration on downsampled point clouds.")
     print("   Since the downsampling voxel size is %.3f," % voxel_size)
     print("   we use a liberal distance threshold %.3f." % distance_threshold)
@@ -75,13 +75,14 @@ def execute_global_registration(source_down, target_down, source_fpfh,
 
 # Run ICP registration
 def refine_registration(source, target, source_fpfh, target_fpfh, voxel_size, result_ransac):
-    distance_threshold = voxel_size * 0.4
+    distance_threshold = voxel_size * 0.4  # 0.4
     print(":: Point-to-plane ICP registration is applied on original point")
     print("   clouds to refine the alignment. This time we use a strict")
     print("   distance threshold %.3f." % distance_threshold)
     result = o3d.pipelines.registration.registration_icp(
         source, target, distance_threshold, result_ransac.transformation,
-        o3d.pipelines.registration.TransformationEstimationPointToPoint())
+        o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+        criteria=o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=1000))
     return result
 
 
@@ -161,6 +162,6 @@ if __name__=="__main__":
     target.paint_uniform_color([0, 0.651, 0.929])
     o3d.visualization.draw_geometries([source, target])
 
-    registration(source, target, is_filter=True)
+    registration(source, target, is_filter=False)
 
     
